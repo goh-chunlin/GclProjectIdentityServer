@@ -27,7 +27,7 @@ namespace GclProjectIdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -37,6 +37,16 @@ namespace GclProjectIdentityServer
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+
+            // Adds IdentityServer
+            services.AddIdentityServer()
+                // Remove AddTemporarySigningCredential in 2.0 (https://github.com/IdentityServer/IdentityServer4/issues/1139)
+                //.AddTemporarySigningCredential()  
+                .AddDeveloperSigningCredential()
+                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddAspNetIdentity<ApplicationUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +65,9 @@ namespace GclProjectIdentityServer
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            // Adds IdentityServer
+            app.UseIdentityServer();
 
             app.UseMvc(routes =>
             {
