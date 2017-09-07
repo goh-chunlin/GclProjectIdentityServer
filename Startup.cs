@@ -43,7 +43,7 @@ namespace GclProjectIdentityServer
                 // Remove AddTemporarySigningCredential in 2.0 (https://github.com/IdentityServer/IdentityServer4/issues/1139)
                 //.AddTemporarySigningCredential()  
                 .AddDeveloperSigningCredential()
-                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients(Configuration["AppSettings:DomainName"]))
                 .AddAspNetIdentity<ApplicationUser>();
