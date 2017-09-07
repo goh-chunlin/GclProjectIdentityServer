@@ -13161,6 +13161,7 @@
     ".NETCoreApp,Version=v2.0": [
       "IdentityServer4.AspNetIdentity >= 2.0.0-rc1",
       "Microsoft.AspNetCore.All >= 2.0.0",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 2.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 2.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.0"
@@ -13216,6 +13217,10 @@
             "version": "2.0.0-rc1"
           },
           "Microsoft.AspNetCore.All": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
             "version": "2.0.0"
           },
