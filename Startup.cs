@@ -45,7 +45,7 @@ namespace GclProjectIdentityServer
                 .AddDeveloperSigningCredential()
                 //.AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryClients(Config.GetClients(Configuration["AppSettings:DomainName"]))
                 .AddAspNetIdentity<ApplicationUser>();
         }
 
