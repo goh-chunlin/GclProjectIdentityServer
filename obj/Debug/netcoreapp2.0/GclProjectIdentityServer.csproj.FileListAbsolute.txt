@@ -1,0 +1,12 @@
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/app.db
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/GclProjectIdentityServer.deps.json
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/GclProjectIdentityServer.runtimeconfig.json
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/GclProjectIdentityServer.runtimeconfig.dev.json
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/GclProjectIdentityServer.dll
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/bin/Debug/netcoreapp2.0/GclProjectIdentityServer.pdb
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/GclProjectIdentityServer.csproj.CoreCompileInputs.cache
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/UserSecretsAssemblyInfo.cs
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/GclProjectIdentityServer.AssemblyInfoInputs.cache
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/GclProjectIdentityServer.AssemblyInfo.cs
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/GclProjectIdentityServer.dll
+/Users/chunlin/ASP.NetProjects/GclProjectIdentityServer/obj/Debug/netcoreapp2.0/GclProjectIdentityServer.pdb
