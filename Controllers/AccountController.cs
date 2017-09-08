@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using GclProjectIdentityServer.Models;
 using GclProjectIdentityServer.Models.AccountViewModels;
 using GclProjectIdentityServer.Services;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GclProjectIdentityServer.Controllers
 {
@@ -59,6 +60,13 @@ namespace GclProjectIdentityServer.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    await _userManager.AddClaimAsync(user, new Claim(JwtRegisteredClaimNames.Sub, user.Id));
+                    await _userManager.AddClaimAsync(user, new Claim("name", user.UserName));
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -221,6 +229,7 @@ namespace GclProjectIdentityServer.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -229,6 +238,9 @@ namespace GclProjectIdentityServer.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+                    await _userManager.AddClaimAsync(user, new Claim(JwtRegisteredClaimNames.Sub, user.Id));
+                    await _userManager.AddClaimAsync(user, new Claim("name", user.UserName));
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");

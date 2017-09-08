@@ -15,7 +15,7 @@ namespace GclProjectIdentityServer
                 new IdentityResources.Email(),
             };
         }
-		
+
         // scopes define the API resources in your system
         public static IEnumerable<ApiResource> GetApiResources()
         {
@@ -34,13 +34,13 @@ namespace GclProjectIdentityServer
                 {
                     ClientId = "client",
 					ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Implicit,
 
 					RequireConsent = false,
 
                     ClientSecrets = 
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("secret")
                     },
 
 					RedirectUris           = { $"{domainName}/signin-oidc" },

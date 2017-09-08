@@ -36,8 +36,6 @@ namespace GclProjectIdentityServer
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddMvc();
-
             // Adds IdentityServer
             services.AddIdentityServer()
                 // Remove AddTemporarySigningCredential in 2.0 (https://github.com/IdentityServer/IdentityServer4/issues/1139)
@@ -47,6 +45,8 @@ namespace GclProjectIdentityServer
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients(Configuration["AppSettings:DomainName"]))
                 .AddAspNetIdentity<ApplicationUser>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,8 +63,6 @@ namespace GclProjectIdentityServer
             }
 
             app.UseStaticFiles();
-
-            app.UseAuthentication();
 
             // Adds IdentityServer
             app.UseIdentityServer();
