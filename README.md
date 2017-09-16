@@ -112,7 +112,7 @@ Grant Types are ways a client wants to interact with IdentityServer. The OpenID 
 - Refresh Token;
 - Extension Grants.
 
-![Deciding which Grant Type to Use(Source: http://oauth2.thephpleague.com/authorization-server/which-grant/)](github-images/which-grants.svg?raw=true)
+![Deciding which Grant Type to Use(Source: http://oauth2.thephpleague.com/authorization-server/which-grant/)](github-images/which-grants.png?raw=true)
 
 #### Resource Owner Password (Not Recommended!)
 It allows to request tokens **on behalf** of a user by sending the user's name and password to the token endpoint. This is the so called "non-interactive" authentication and is generally **not recommended**, unless used in certain legacy or first-party integration scenarios.
