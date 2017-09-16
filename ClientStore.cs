@@ -23,19 +23,19 @@ namespace GclProjectIdentityServer
 
             availableClients.Add(new Client
                 {
-                    ClientId = "client",
-                    ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    ClientId = "sciyo-mvc",
+                    ClientName = "Sciyo ASP .NET Core MVC",
+                    AllowedGrantTypes = GrantTypes.Hybrid,
 
                     RequireConsent = false,
 
                     ClientSecrets =
                     {
-                        new Secret("secret")
+                        new Secret(Configuration["AppSettings:Gcl-ApiClientSecret"].Sha256())
                     },
 
-                    RedirectUris           = { $"{Configuration["AppSettings:DomainName"]}/signin-oidc" },
-                    PostLogoutRedirectUris = { $"{Configuration["AppSettings:DomainName"]}/signout-callback-oidc" },
+                    RedirectUris          = { $"{Configuration["AppSettings:DomainName"]}/signin-oidc" },
+                    FrontChannelLogoutUri = $"{Configuration["AppSettings:DomainName"]}/signout-callback-oidc",
 
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
