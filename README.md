@@ -27,30 +27,55 @@ The following Nuget packages are needed. At the point of writing this document, 
 - [IdentityServer4.AspNetIdentity 2.0.0-rc1](https://www.nuget.org/packages/IdentityServer4.AspNetIdentity/2.0.0-rc1)
 - [Microsoft.AspNetCore.Authentication.OpenIdConnect 2.0.0](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/)
 
-## Setup (Step 3): Configure and Add IdentityServer to ASP .NET Core
+## Setup (Step 2): Defining Resources and Clients
+IdentityServer4 must know what scopes can be requested by users. These are defined as **Resources**. IdentityServer4 has two kinds of resources:
+1. **API Resources**: Protected data or functionality which a user might gain access to with an access token. An example of an API resource would be a Web API that require authorization to call.
+2. **Identity Resources**: Claims which are given to a client to identify a user. This could include their name, email address, or other claims. Identity information is returned in an ID token by OpenID Connect flows.
+
+Both resources and clients which want to access resources can be [defined in a single **Config.cs** file](https://github.com/goh-chunlin/GclProjectIdentityServer/blob/master/Config.cs).
+
+## Setup (Step 3): Configure ASP .NET Identity Core
+
+## Setup (Step 4): Configure and Add IdentityServer to ASP .NET Core
 In Startup.cs file, we need to modify the codes in ConfigureServices so that the required services are configured and added to the Dependency Injection system.
 
 ```
-        public void ConfigureServices(IServiceCollection services)
-        {
-            ...
+public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    
+    // Adds IdentityServer
+    services.AddIdentityServer()
+        .AddDeveloperSigningCredential()
+        .AddInMemoryIdentityResources(Config.GetIdentityResources())
+        .AddInMemoryApiResources(Config.GetApiResources())
+        .AddInMemoryClients(Config.GetClients())
+        .AddAspNetIdentity<ApplicationUser>();
 
-            // Adds IdentityServer
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients(Configuration["AppSettings:DomainName"]))
-                .AddAspNetIdentity<ApplicationUser>();
-
-            services.AddMvc();
-        }
-
+    services.AddMvc();
+}
 ```
 
-Take note that we are using `AddDeveloperSigningCredential()` because [the original `AddTemporarySigningCredential()` which is used in previous releases of IdentityServer4 has been removed](https://github.com/IdentityServer/IdentityServer4/issues/1139).
+### Components Explanation
+- **AddIdentityServer()**: To register IdentityServer4 services;
+- **AddDeveloperSigningCredential()**: To be used for testing with an auto-generated certificate until a real certificate is available. Take note that we are using `AddDeveloperSigningCredential()` because [the original `AddTemporarySigningCredential()` which is used in previous releases of IdentityServer4 has been removed](https://github.com/IdentityServer/IdentityServer4/issues/1139). Alternatively, we can create a self-signing certificate and then use `AddSigningCredential()` to load the certificate from the machine certificate store;
+- **AddInMemoryIdentityResources()**: To include the identity resources;
+- **AddInMemoryApiResources()**: To include the API resources;
+- **AddInMemoryClients()**: To configure clients because IdentityServer4 must be configured with a list of clients that will be requesting tokens;
+- **AddAspIdentity()**: To get user profile information from our ASP.NET Core Identity context, and will automatically setup the necessary IResourceOwnerPasswordValidator for validating credentials. It will also configure IdentityServer4 to correctly extract JWT subject, user name, and role claims from ASP.NET Core Identity entities.
 
 In Configure the middleware is added to the HTTP pipeline.
+```
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    ...
+
+    // Adds IdentityServer
+    app.UseIdentityServer();
+
+    app.UseMvc(...);
+}
+```
 
 ## References
 - [Stack Overflow - IdentityServer Architecture Overview](https://stackoverflow.com/a/39560625/1177328)
