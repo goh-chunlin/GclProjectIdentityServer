@@ -4,7 +4,9 @@ This is an IdentityServer using ASP .NET Core Identity to access the resources i
 ## Objective
 This project is to develop and maintain Identity Server that will be used by many projects in GCL Projects which requires a Single Sign-On (SSO) solution. By doing this, user who logs in from an application in GCL Projects can also access the another resource in GCL Projects with the same credential.
 
-![A simple architecture supporting a security token service (Source: https://stackoverflow.com/q/42959647/1177328)](https://i.stack.imgur.com/yF5kh.png)
+![Traditional Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure1)](github-images/traditional-authentication-scheme.jpg?raw=true)
+
+![OpenID Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure2)](github-images/openid-authentication-scheme.jpg?raw=true)
 
 Outsourcing the Authentication and Authorization functions to a security token service prevents duplicating that functionality across those applications and endpoints. Due to the fact that OpenID Connect is an extension on top of OAuth 2.0, the two fundamental security concerns, Authentication and API access, are combined into a single protocol - often with a single round trip to the security token service.
 
@@ -21,6 +23,8 @@ In this project, we have
 
 IdentityServer is designed for flexibility and part of that is allowing us to use any database we want. Since we are starting with a new user database, then ASP.NET Identity is what we have chosen in this project.
 
+![OpenID Authentication Flow (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure3)](github-images/openid-authentication-flow.jpg?raw=true)
+
 ## Setup (Step 1): Adding Necessary Nuget Packages
 The following Nuget packages are needed. At the point of writing this document, the version we use are 2.0 RC1 or 2.0.
 - [IdentityServer4 2.0.0-rc1](https://www.nuget.org/packages/IdentityServer4/2.0.0-rc1)
@@ -34,9 +38,7 @@ IdentityServer4 must know what scopes can be requested by users. These are defin
 
 Both resources and clients which want to access resources can be [defined in a single **Config.cs** file](https://github.com/goh-chunlin/GclProjectIdentityServer/blob/master/Config.cs).
 
-## Setup (Step 3): Configure ASP .NET Identity Core
-
-## Setup (Step 4): Configure and Add IdentityServer to ASP .NET Core
+## Setup (Step 3): Configure and Add IdentityServer to ASP .NET Core
 In Startup.cs file, we need to modify the codes in ConfigureServices so that the required services are configured and added to the Dependency Injection system.
 
 ```
@@ -96,6 +98,35 @@ If we view the **Discovery Document** at `http://localhost:4000/.well-known/open
 ```
 
 We can also use **Postman** to test the clients, as shown in the screenshot below. 
+![Testing the Client on Postman](github-images/postman-identityserver-test.png?raw=true)
+
+### Grant Types
+Grant Types are ways a client wants to interact with IdentityServer. The OpenID Connect and OAuth 2 specs define the following grant types:
+- Resource Owner Password;
+- Client Credential;
+- Implicit;
+- Authorization code
+- Hybrid
+- Refresh tokens
+- Extension grants
+
+#### Resource Owner Password (Not Recommended!)
+It allows to request tokens **on behalf** of a user by sending the user's name and password to the token endpoint. This is the so called "non-interactive" authentication and is generally **not recommended**, unless used in certain legacy or first-party integration scenarios.
+
+#### Client Credential
+This is the simplest grant type and is used for **server to server** communication. Hence, tokens are always requested on behalf of a client, not a user. With this grant type we send a token request to the token endpoint, and get an access token back that represents the client. The **client has to authenticate with the token endpoint** using its client ID and secret.
+
+#### Implicit
+It allows a client to obtain an access token directly from the authorization endpoint, without contacting the token endpoint nor authenticating the client. An important characteristic of the OAuth2 implicit grant is the fact that such flows never return Refresh Tokens to the client. Once the token is expired, the user will need to log in again to have further access to the web resource.
+
+![Implicit Grant (Source: http://www.qeo.org/Doc/Implicit-Grant_21676147.html)](github-images/implicit-grant.png?raw=true)
+
+### Scopes
+
+### From Auth 1.0 to Auth 2.0
+In ASP .NET Core 2.0, [the old 1.0 Authentication stack no longer will work, and is obsolete in 2.0](https://github.com/aspnet/Announcements/issues/262). All authentication related functionality must be migrated to the 2.0 stack. BuilderExtensions.UseIdentity(IApplicationBuilder)' is obsolete and will be removed in a future version. The recommended alternative is UseAuthentication().
+
+Hence, the line of code `app.UseIdentity();` is no longer needed. Instead, we will just have `app.UseAuthentication();` as shown in the code above.
 
 ## References
 - [Stack Overflow - IdentityServer Architecture Overview](https://stackoverflow.com/a/39560625/1177328)
@@ -120,3 +151,4 @@ We can also use **Postman** to test the clients, as shown in the screenshot belo
 - [OpenID Connect for User Authentication In ASP.NET Core](https://stormpath.com/blog/openid-connect-user-authentication-in-asp-net-core)
 - [Migrating Authentication and Identity to ASP.NET Core 2.0](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/identity-2x)
 - [Identity Server 4: adding claims to access token](https://stackoverflow.com/questions/41387069/identity-server-4-adding-claims-to-access-token)
+- [Qeo Native Documentation : Implicit Grant](http://www.qeo.org/Doc/Implicit-Grant_21676147.html)
