@@ -101,6 +101,11 @@ We can also use **Postman** to test the clients, as shown in the screenshot belo
 ![Testing the Client on Postman](github-images/postman-identityserver-test.png?raw=true)
 
 ### Scopes
+Scopes represent what we are allowed to do. In IdentityServer4 scopes are modelled as resources, which come in two flavors:
+- Identity;
+- API.
+
+An identity resource allows us to model a scope that will return a certain set of claims, whilst an API resource scope allows us to model access to a protected resource (typically an API).
 
 ### Grant Types
 Grant Types are ways a client wants to interact with IdentityServer. The OpenID Connect and OAuth 2 specs define the following grant types:
@@ -112,7 +117,7 @@ Grant Types are ways a client wants to interact with IdentityServer. The OpenID 
 - Refresh Token;
 - Extension Grants.
 
-![Deciding which Grant Type to Use(Source: http://oauth2.thephpleague.com/authorization-server/which-grant/)](github-images/which-grants.svg?raw=true)
+![Deciding which Grant Type to Use(Source: http://oauth2.thephpleague.com/authorization-server/which-grant/)](github-images/which-grants.png?raw=true)
 
 #### Resource Owner Password (Not Recommended!)
 It allows to request tokens **on behalf** of a user by sending the user's name and password to the token endpoint. This is the so called "non-interactive" authentication and is generally **not recommended**, unless used in certain legacy or first-party integration scenarios.
@@ -172,3 +177,4 @@ Hence, the line of code `app.UseIdentity();` is no longer needed. Instead, we wi
 - [Qeo Native Documentation : Implicit Grant](http://www.qeo.org/Doc/Implicit-Grant_21676147.html)
 - [Which OAuth 2.0 Grant should I Implement?](http://oauth2.thephpleague.com/authorization-server/which-grant/)
 - [Authorize access to Web Applications using OAuth 2.0 and Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-oauth-code)
+- [Getting Started with IdentityServer 4](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4)
