@@ -4,9 +4,9 @@ This is an IdentityServer using ASP .NET Core Identity to access the resources i
 ## Objective
 This project is to develop and maintain Identity Server that will be used by many projects in GCL Projects which requires a Single Sign-On (SSO) solution. By doing this, user who logs in from an application in GCL Projects can also access the another resource in GCL Projects with the same credential.
 
-![Traditional Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure1)](github-images/traditional-authentication-scheme.jpg?raw=true)
-
-![OpenID Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure2)](github-images/openid-authentication-scheme.jpg?raw=true)
+| ![Traditional Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure1)](github-images/traditional-authentication-scheme.jpg?raw=true) | ![OpenID Authentication Scheme (Source: http://www.devx.com/supportitems/showSupportItem.php?co=37692&supportitem=figure2)](github-images/openid-authentication-scheme.jpg?raw=true) |
+| --- | --- |
+| Traditional Authentication Scheme | OpenID Authentication Scheme |
 
 Outsourcing the Authentication and Authorization functions to a security token service prevents duplicating that functionality across those applications and endpoints. Due to the fact that OpenID Connect is an extension on top of OAuth 2.0, the two fundamental security concerns, Authentication and API access, are combined into a single protocol - often with a single round trip to the security token service.
 
@@ -100,15 +100,19 @@ If we view the **Discovery Document** at `http://localhost:4000/.well-known/open
 We can also use **Postman** to test the clients, as shown in the screenshot below. 
 ![Testing the Client on Postman](github-images/postman-identityserver-test.png?raw=true)
 
+### Scopes
+
 ### Grant Types
 Grant Types are ways a client wants to interact with IdentityServer. The OpenID Connect and OAuth 2 specs define the following grant types:
 - Resource Owner Password;
 - Client Credential;
 - Implicit;
-- Authorization code
-- Hybrid
-- Refresh tokens
-- Extension grants
+- Authorization Code;
+- Hybrid;
+- Refresh Token;
+- Extension Grants.
+
+![Deciding which Grant Type to Use(Source: http://oauth2.thephpleague.com/authorization-server/which-grant/)](github-images/which-grants.svg?raw=true)
 
 #### Resource Owner Password (Not Recommended!)
 It allows to request tokens **on behalf** of a user by sending the user's name and password to the token endpoint. This is the so called "non-interactive" authentication and is generally **not recommended**, unless used in certain legacy or first-party integration scenarios.
@@ -121,7 +125,21 @@ It allows a client to obtain an access token directly from the authorization end
 
 ![Implicit Grant (Source: http://www.qeo.org/Doc/Implicit-Grant_21676147.html)](github-images/implicit-grant.png?raw=true)
 
-### Scopes
+#### Authorization Code
+The Authorization Code grant provides additional security, but it only works when we have a web server requesting the protected resources. Since the web server can store the access token, we run less risk of the access token being exposed to the Internet, and we can issue a token that lasts a long time. And since the web server is trusted, it can be given a "refresh token", so it can get a new access token when the old one expires.
+
+![Authorization Code Grant (Source: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-oauth-code)](github-images/authorization-code-grant.png?raw=true)
+
+#### Hybrid
+Hybrid flow is a combination of the implicit and authorization code flow. This is the recommended flow for native applications that want to retrieve access tokens (and possibly refresh tokens as well) and is used for server-side web applications and native desktop/mobile applications.
+
+#### Refresh Token
+Refresh tokens allow requesting new access tokens without user interaction. Every time the client refreshes a token it needs to make an (authenticated) back-channel call to IdentityServer. This allows checking if the refresh token is still valid, or has been revoked in the meantime.
+
+Refresh tokens are supported in hybrid, authorization code and resource owner password flows. To request a refresh token, the client needs to include the **offline_access** scope in the token request (and must be authorized to for that scope).
+
+#### Extension Grant
+Extension grants allow extending the token endpoint with new grant types.
 
 ### From Auth 1.0 to Auth 2.0
 In ASP .NET Core 2.0, [the old 1.0 Authentication stack no longer will work, and is obsolete in 2.0](https://github.com/aspnet/Announcements/issues/262). All authentication related functionality must be migrated to the 2.0 stack. BuilderExtensions.UseIdentity(IApplicationBuilder)' is obsolete and will be removed in a future version. The recommended alternative is UseAuthentication().
@@ -152,3 +170,5 @@ Hence, the line of code `app.UseIdentity();` is no longer needed. Instead, we wi
 - [Migrating Authentication and Identity to ASP.NET Core 2.0](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/identity-2x)
 - [Identity Server 4: adding claims to access token](https://stackoverflow.com/questions/41387069/identity-server-4-adding-claims-to-access-token)
 - [Qeo Native Documentation : Implicit Grant](http://www.qeo.org/Doc/Implicit-Grant_21676147.html)
+- [Which OAuth 2.0 Grant should I Implement?](http://oauth2.thephpleague.com/authorization-server/which-grant/)
+- [Authorize access to Web Applications using OAuth 2.0 and Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-oauth-code)
