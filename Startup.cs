@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using GclProjectIdentityServer.Data;
 using GclProjectIdentityServer.Models;
 using GclProjectIdentityServer.Services;
+using IdentityServer4.Stores;
 
 namespace GclProjectIdentityServer
 {
@@ -43,7 +44,7 @@ namespace GclProjectIdentityServer
                 .AddDeveloperSigningCredential()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients(Configuration["AppSettings:DomainName"]))
+                .AddInMemoryClients(new ClientStore(Configuration).GetClients())
                 .AddAspNetIdentity<ApplicationUser>();
 
             services.AddMvc();

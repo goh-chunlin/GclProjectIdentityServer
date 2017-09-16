@@ -24,38 +24,5 @@ namespace GclProjectIdentityServer
                 new ApiResource("api1", "My API")
             };
         }
-
-        // client want to access resources (aka scopes)
-        public static IEnumerable<Client> GetClients(string domainName)
-        {
-            return new List<Client>
-            {
-                new Client
-                {
-                    ClientId = "client",
-                    ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-
-                    RequireConsent = false,
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret")
-                    },
-
-                    RedirectUris           = { $"{domainName}/signin-oidc" },
-                    PostLogoutRedirectUris = { $"{domainName}/signout-callback-oidc" },
-
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api1"
-                    },
-
-                    AllowOfflineAccess = true
-
-                }
-            };
-        }
     }
 }
