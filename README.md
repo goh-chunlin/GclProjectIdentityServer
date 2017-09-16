@@ -49,7 +49,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddDeveloperSigningCredential()
         .AddInMemoryIdentityResources(Config.GetIdentityResources())
         .AddInMemoryApiResources(Config.GetApiResources())
-        .AddInMemoryClients(Config.GetClients())
+        .AddInMemoryClients(new ClientStore(Configuration).GetClients())
         .AddAspNetIdentity<ApplicationUser>();
 
     services.AddMvc();
@@ -76,6 +76,26 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     app.UseMvc(...);
 }
 ```
+
+If we view the **Discovery Document** at `http://localhost:4000/.well-known/openid-configuration` (The port is 4000 because it [is defined so in the **Program.cs** file](https://github.com/goh-chunlin/GclProjectIdentityServer/blob/master/Program.cs), then  we will be able to see the following which will be used by our clients and APIs to download the necessary configuration data.
+
+```
+{
+    "issuer":"http://localhost:4000",
+    "jwks_uri":"http://localhost:4000/.well-known/openid-configuration/jwks",
+    "authorization_endpoint":"http://localhost:4000/connect/authorize",
+    "token_endpoint":"http://localhost:4000/connect/token",
+    "userinfo_endpoint":"http://localhost:4000/connect/userinfo",
+    "end_session_endpoint":"http://localhost:4000/connect/endsession",
+    "check_session_iframe":"http://localhost:4000/connect/checksession",
+    "scopes_supported":["openid","profile","email","api1","offline_access"],
+    "id_token_signing_alg_values_supported":["RS256"],
+    "code_challenge_methods_supported":["plain","S256"],
+    ...
+}
+```
+
+We can also use **Postman** to test the clients, as shown in the screenshot below. 
 
 ## References
 - [Stack Overflow - IdentityServer Architecture Overview](https://stackoverflow.com/a/39560625/1177328)
