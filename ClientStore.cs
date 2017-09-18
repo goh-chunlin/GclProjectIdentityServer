@@ -27,7 +27,7 @@ namespace GclProjectIdentityServer
                     ClientName = "Sciyo ASP .NET Core MVC",
                     AllowedGrantTypes = GrantTypes.Hybrid,
 
-                    RequireConsent = false,
+                    RequireConsent = true,
 
                     ClientSecrets =
                     {
