@@ -151,6 +151,17 @@ In ASP .NET Core 2.0, [the old 1.0 Authentication stack no longer will work, and
 
 Hence, the line of code `app.UseIdentity();` is no longer needed. Instead, we will just have `app.UseAuthentication();` as shown in the code above.
 
+## Consent Page
+During an authorization request, if IdentityServer requires user consent the browser will be redirected to the consent page.
+
+The codes can be found at the following places in the project.
+- [Controllers/Consent.cs](https://github.com/goh-chunlin/GclProjectIdentityServer/blob/master/Controllers/ConsentController.cs);
+- [Models/ConsentPageViewModels/](https://github.com/goh-chunlin/GclProjectIdentityServer/tree/master/Models/ConsentPageViewModels);
+- [Views/Consent/](https://github.com/goh-chunlin/GclProjectIdentityServer/tree/master/Views/Consent);
+- [Views/Shared/_ScopeListItem](https://github.com/goh-chunlin/GclProjectIdentityServer/blob/master/Views/Shared/_ScopeListItem.cshtml).
+
+![Consent Page](github-images/consent-page.png?raw=true)
+
 ## References
 - [Stack Overflow - IdentityServer Architecture Overview](https://stackoverflow.com/a/39560625/1177328)
 - [Sample - Identity Server with Asp .Net Identity](https://github.com/IdentityServer/IdentityServer4.Samples/tree/release/Quickstarts/6_AspNetIdentity/src/IdentityServerWithAspNetIdentity)
