@@ -189,3 +189,4 @@ The codes can be found at the following places in the project.
 - [Which OAuth 2.0 Grant should I Implement?](http://oauth2.thephpleague.com/authorization-server/which-grant/)
 - [Authorize access to Web Applications using OAuth 2.0 and Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-oauth-code)
 - [Getting Started with IdentityServer 4](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4)
+- [Consent](https://identityserver4.readthedocs.io/en/release/topics/consent.html)
